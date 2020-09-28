@@ -5,3 +5,7 @@ By [Mullet Mafia Dev](https://www.roblox.com/groups/5018486/Mullet-Mafia-Dev#!/a
 </div>
 
 Dice Camera is a custom over the shoulder camera that comes equipped with right clicking zoom & a method to call a spring-based recoil to the camera. The custom camera only works on the client but you can pull numbers from the server to use them to balance where gun shots come from & more.
+
+## More to Come
+
+A planned rework for my upcoming project is planned, this will work on all platforms in due time.
