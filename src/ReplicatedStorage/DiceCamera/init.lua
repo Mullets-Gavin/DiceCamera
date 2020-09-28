@@ -4,7 +4,7 @@
 --]]
 
 --// logic
-local CustomCamera = {}
+local DiceCamera = {}
 
 --// services
 local LoadLibrary = require(game:GetService('ReplicatedStorage'):WaitForChild('PlayingCards'))
@@ -15,10 +15,10 @@ end})
 
 --// variables
 local Camera = Services['Workspace'].CurrentCamera
-local Methods = require(script.Methods)
+local Methods = require(script:WaitForChild('Methods'))
 
 --// functions
-function CustomCamera:Enabled(state)
+function DiceCamera:Enabled(state)
 	Methods.Enabled = state
 	if state then
 		Camera.CameraType = Enum.CameraType.Scriptable
@@ -27,11 +27,11 @@ function CustomCamera:Enabled(state)
 	end
 end
 
-function CustomCamera:Shake(intensity)
+function DiceCamera:Shake(intensity)
 	Methods:Shake(intensity)
 end
 
-function CustomCamera:GetDefault()
+function DiceCamera:GetDefault()
 	return Methods.DefaultPos
 end
 
@@ -59,4 +59,4 @@ if Services['RunService']:IsClient() then
 	end)
 end
 
-return CustomCamera
+return DiceCamera
