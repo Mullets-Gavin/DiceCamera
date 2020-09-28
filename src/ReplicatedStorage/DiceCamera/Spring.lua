@@ -48,7 +48,7 @@ function Spring.new(initial)
 	local target = initial or 0
 
 	return setmetatable({
-		_time0 = tick();
+		_time0 = os.clock();
 		_position0 = target;
 		_velocity0 = 0*target;
 		_target = target;
@@ -66,7 +66,7 @@ end
 --- Skip forwards in now
 -- @param delta now to skip forwards
 function Spring:TimeSkip(delta)
-	local now = tick()
+	local now = os.clock()
 	local position, velocity = self:_positionVelocity(now+delta)
 	self._position0 = position
 	self._velocity0 = velocity
@@ -77,10 +77,10 @@ function Spring:__index(index)
 	if Spring[index] then
 		return Spring[index]
 	elseif index == "Value" or index == "Position" or index == "p" then
-		local position, _ = self:_positionVelocity(tick())
+		local position, _ = self:_positionVelocity(os.clock())
 		return position
 	elseif index == "Velocity" or index == "v" then
-		local _, velocity = self:_positionVelocity(tick())
+		local _, velocity = self:_positionVelocity(os.clock())
 		return velocity
 	elseif index == "Target" or index == "t" then
 		return self._target
@@ -94,7 +94,7 @@ function Spring:__index(index)
 end
 
 function Spring:__newindex(index, value)
-	local now = tick()
+	local now = os.clock()
 
 	if index == "Value" or index == "Position" or index == "p" then
 		local _, velocity = self:_positionVelocity(now)
