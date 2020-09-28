@@ -1,6 +1,6 @@
 --// logic
 local Methods = {}
-Methods.Enabled = true
+Methods.Enabled = false
 Methods.Shaking = false
 Methods.ScopeEnabled = false
 Methods.X_Angle = 0
@@ -11,15 +11,11 @@ Methods.ZoomDistance = 7
 Methods.ZoomDefault = 70
 Methods.ZoomScoped = 50
 Methods.ShakeCache = {}
-
---[[ MODIFIED CODE ]]
-Methods.Spring = require(script.Parent.Spring).new(Vector3.new())
+Methods.Spring = require(script.Parent:WaitForChild('Spring')).new(Vector3.new())
 Methods.Spring.Damper = 0.5
 Methods.Spring.Speed = 25
---[[               ]]
 
 --// services
-local LoadLibrary = require(game:GetService('ReplicatedStorage'):WaitForChild('PlayingCards'))
 local Services = setmetatable({}, {__index = function(cache, serviceName)
     cache[serviceName] = game:GetService(serviceName)
     return cache[serviceName]
@@ -46,10 +42,7 @@ function Methods:Position()
 			local startCFrame = CFrame.new((HRP.CFrame.p + Vector3.new(0,2.2,0))) * CFrame.Angles(0, math.rad(Methods.X_Angle), 0) * CFrame.Angles(math.rad(Methods.Y_Angle), 0, 0)
 			local cameraCFrame = startCFrame + startCFrame:vectorToWorldSpace(Vector3.new(Methods.CameraPos.X, Methods.CameraPos.Y, Methods.CameraPos.Z))
 			local cameraFocus = startCFrame + startCFrame:vectorToWorldSpace(Vector3.new(Methods.CameraPos.X, Methods.CameraPos.Y, -50000))
-			
-			--[[ MODIFIED CODE ]]
 			Camera.CFrame = CFrame.new(cameraCFrame.p,cameraFocus.p) + Methods.Spring.Position
-			--[[               ]]
 		end
 	end
 end
@@ -76,27 +69,6 @@ function Methods:Collisions()
 end
 
 function Methods:Shake(intensity)
-	--[[ MODIFIED CODE ]]
-	
---	coroutine.wrap(function()
---		local Camera = Services['Workspace'].CurrentCamera
---		Methods.Shaking = true
---		for index = 1,intensity do
---			Methods.CameraPos = Vector3.new(Methods.CameraPos.X + GenerateRandomNumber(), Methods.CameraPos.Y + GenerateRandomNumber(), Methods.CameraPos.Z)
---			Services['RunService'].RenderStepped:Wait()
---			--wait(0.1)
---		end
---		Methods.Shaking = false
---		if Methods.ScopeEnabled then
---			Methods.CameraPos = Vector3.new(Methods.DefaultPos.X,0,Methods.ZoomDistance)
---			Camera.FieldOfView = Methods.ZoomScoped
---		else
---			Methods.CameraPos = Methods.DefaultPos
---			Camera.FieldOfView = Methods.ZoomDefault
---		end
---		Methods.ShakeCache = {}
---	end)()
-	
 	local random = Random.new()
 	local direction = Vector3.new(random:NextNumber(-1, 1), random:NextNumber(-1, 1), random:NextNumber(-1, 1))
 	if direction.Magnitude > 0 then
@@ -105,8 +77,6 @@ function Methods:Shake(intensity)
 		direction = Vector3.new(1,1,1).Unit
 	end
 	Methods.Spring:Impulse(direction * intensity)
-	
-	--[[               ]]
 end
 
 function Methods:Scope(state)
@@ -122,15 +92,11 @@ function Methods:Scope(state)
 			return
 		end
 	end
-	--[[ MODIFIED CODE ]]
---	if not Methods.Shaking then
-		Methods.CameraPos = Methods.DefaultPos
-		local FOVTween = Services['TweenService']:Create(Camera,TweenInfo.new(0.5),{FieldOfView = Methods.ZoomDefault})
-		FOVTween:Play()
-		FOVTween.Completed:Wait()
-		FOVTween:Destroy()
---	end
-	--[[               ]]
+	Methods.CameraPos = Methods.DefaultPos
+	local FOVTween = Services['TweenService']:Create(Camera,TweenInfo.new(0.5),{FieldOfView = Methods.ZoomDefault})
+	FOVTween:Play()
+	FOVTween.Completed:Wait()
+	FOVTween:Destroy()
 end
 
 function Methods:Calculate(input)
